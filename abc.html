@@ -1,0 +1,213 @@
+<link rel="stylesheet" type="text/css" href="keyboard.css">
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+
+<style>
+.nextToPress {
+	background-color: green;
+}
+
+.wrongKey {
+	background-color: red;
+}
+
+#timer {
+	align: centre;
+}
+
+.winText {
+	color: green;
+}
+
+.loseText {
+	color: red;
+}
+
+</style>
+<script>
+
+	var alphabet = [];
+	
+	for (var i = 97; i < 97 + 26; i++) {
+		alphabet.push(String.fromCharCode(i));
+	}
+	
+	var curr = alphabet.shift();
+		
+	var play = 0;
+	
+	var lost = 1;
+	
+	var elapsed = 0;
+	
+	var ready = 1;
+	
+	var key;
+	window.setInterval(function(){
+		if (lost == 1 || ready == 1) {
+			curTime = (new Date()).getTime();
+		}
+		if (lost == 0 && ready == 0) {
+			prevTime = curTime;
+			curTime = (new Date()).getTime();
+			deltaTime = curTime - prevTime;
+			elapsed += deltaTime;
+			var seconds = Math.floor(elapsed / 1000);
+			var ms = elapsed - seconds * 1000;
+			$("#timer").text(seconds.toString() + ":" + ms.toString());
+
+		}
+	}, 0.001);
+
+	$(window).keypress(function(e) {
+	
+		if (lost == 1) {
+			if (e.which == 32) {
+				$("#timer").text("00:00");
+				$("#timer").removeClass("winText");
+				$("#timer").removeClass("loseText");
+				$("#" + curr).removeClass("nextToPress");
+				$("#" + key).removeClass("wrongKey");
+				$("#a").addClass("nextToPress");
+				ready = 1;
+				// reset alphabet
+				alphabet = [];
+	
+				for (var i = 97; i < 97 + 26; i++) {
+					alphabet.push(String.fromCharCode(i));
+				}
+				curr = alphabet.shift();
+				elapsed = 0;
+
+			}
+		}
+	
+		
+		
+		if (lost == 0 || (ready == 1 && e.which == 97)) {
+			lost = 0;
+			ready = 0;
+			key = String.fromCharCode(e.which);
+			if (key == curr) {
+				$("#" + curr).removeClass("nextToPress");
+				curr = alphabet.shift();
+				$("#" + curr).addClass("nextToPress");
+			} else {
+				$("#" + key).addClass("wrongKey");
+				play = 0;
+				lost = 1;
+				$("#timer").addClass("loseText");
+
+			}
+		   }
+		   if (alphabet.length == 0 && key == 'z') {
+				lost = 1;
+				$("#timer").addClass("winText");
+		   }
+	   
+
+	});
+
+
+</script>
+
+<div id="timer" style="top:20%; position:absolute; left:50%; font-size: 3em; transform:translate(-50%,-50%)">00:00</div>
+<div id="keyboard" style="top:50%; position:absolute; left:50%; transform:translate(-50%,-50%)">
+    	<ul class="cf">
+        	<li><a href="#" class="key c27 fn"><span id="esc">esc</span></a></li>
+        	<li><a href="#" class="key c112 fn"><span>F1</span></a></li>
+        	<li><a href="#" class="key c113 fn"><span>F2</span></a></li>
+        	<li><a href="#" class="key c114 fn"><span>F3</span></a></li>
+        	<li><a href="#" class="key c115 fn"><span>F4</span></a></li>
+        	<li><a href="#" class="key c116 fn"><span>F5</span></a></li>
+        	<li><a href="#" class="key c117 fn"><span>F6</span></a></li>
+        	<li><a href="#" class="key c118 fn"><span>F7</span></a></li>
+        	<li><a href="#" class="key c119 fn"><span>F8</span></a></li>
+        	<li><a href="#" class="key c120 fn"><span>F9</span></a></li>
+        	<li><a href="#" class="key c121 fn"><span>F10</span></a></li>
+        	<li><a href="#" class="key c122 fn"><span>F11</span></a></li>
+        	<li><a href="#" class="key c123 fn"><span>F12</span></a></li>
+        	<li><a href="#" class="key fn"><span>Eject</span></a></li>
+        </ul>
+    	<ul class="cf" id="numbers">
+	    	<li><a href="#" class="key c192"><b>~</b><span>`</span></a></li>
+	    	<li><a href="#" class="key c49"><b>!</b><span>1</span></a></li>
+	    	<li><a href="#" class="key c50"><b>@</b><span>2</span></a></li>
+	    	<li><a href="#" class="key c51"><b>#</b><span>3</span></a></li>
+	    	<li><a href="#" class="key c52"><b>$</b><span>4</span></a></li>
+	    	<li><a href="#" class="key c53"><b>%</b><span>5</span></a></li>
+	    	<li><a href="#" class="key c54"><b>^</b><span>6</span></a></li>
+	    	<li><a href="#" class="key c55"><b>&amp;</b><span>7</span></a></li>
+	    	<li><a href="#" class="key c56"><b>*</b><span>8</span></a></li>
+	    	<li><a href="#" class="key c57"><b>(</b><span>9</span></a></li>
+	    	<li><a href="#" class="key c48"><b>)</b><span>0</span></a></li>
+	    	<li><a href="#" class="key c189 alt"><b>_</b><span>-</span></a></li>
+	    	<li><a href="#" class="key c187"><b>+</b><span>=</span></a></li>
+	    	<li><a href="#" class="key c46" id="delete"><span>Delete</span></a></li>
+        </ul>
+    	<ul class="cf" id="qwerty">
+	    	<li><a href="#" class="key c9" id="tab"><span>tab</span></a></li>
+	    	<li><a href="#" class="key c81" id="q"><span>q</span></a></li>
+	    	<li><a href="#" class="key c87" id="w"><span>w</span></a></li>
+	    	<li><a href="#" class="key c69" id="e"><span>e</span></a></li>
+	    	<li><a href="#" class="key c82" id="r"><span>r</span></a></li>
+	    	<li><a href="#" class="key c84" id="t"><span>t</span></a></li>
+	    	<li><a href="#" class="key c89" id="y"><span>y</span></a></li>
+	    	<li><a href="#" class="key c85" id="u"><span>u</span></a></li>
+	    	<li><a href="#" class="key c73" id="i"><span>i</span></a></li>
+	    	<li><a href="#" class="key c79" id="o"><span>o</span></a></li>
+	    	<li><a href="#" class="key c80" id="p"><span>p</span></a></li>
+	    	<li><a href="#" class="key c219 alt"><b>{</b><span>[</span></a></li>
+	    	<li><a href="#" class="key c221 alt"><b>}</b><span>]</span></a></li>
+	    	<li><a href="#" class="key c220 alt"><b>|</b><span>\</span></a></li>
+        </ul>
+        <ul class="cf" id="asdfg">
+	    	<li><a href="#" class="key c20 alt" id="caps"><b></b><span>caps lock</span></a></li>
+	    	<li><a href="#" class="key c65 nextToPress" id="a"><span>a</span></a></li>
+	    	<li><a href="#" class="key c83" id="s"><span>s</span></a></li>
+	    	<li><a href="#" class="key c68" id="d"><span>d</span></a></li>
+	    	<li><a href="#" class="key c70" id="f"><span>f</span></a></li>
+	    	<li><a href="#" class="key c71" id="g"><span>g</span></a></li>
+	    	<li><a href="#" class="key c72" id="h"><span>h</span></a></li>
+	    	<li><a href="#" class="key c74" id="j"><span>j</span></a></li>
+	    	<li><a href="#" class="key c75" id="k"><span>k</span></a></li>
+	    	<li><a href="#" class="key c76" id="l"><span>l</span></a></li>
+	    	<li><a href="#" class="key c186 alt"><b>:</b><span>;</span></a></li>
+	    	<li><a href="#" class="key c222 alt"><b>"</b><span>'</span></a></li>
+	    	<li><a href="#" class="key c13 alt" id="enter"><span>return</span></a></li>
+        </ul>
+        <ul class="cf" id="zxcvb">
+	    	<li><a href="#" class="key c16 shiftleft"><span>Shift</span></a></li>
+	    	<li><a href="#" class="key c90" id="z"><span>z</span></a></li>
+	    	<li><a href="#" class="key c88" id="x"><span>x</span></a></li>
+	    	<li><a href="#" class="key c67" id="c"><span>c</span></a></li>
+	    	<li><a href="#" class="key c86" id="v"><span>v</span></a></li>
+	    	<li><a href="#" class="key c66" id="b"><span>b</span></a></li>
+	    	<li><a href="#" class="key c78" id="n"><span>n</span></a></li>
+	    	<li><a href="#" class="key c77" id="m"><span>m</span></a></li>
+	    	<li><a href="#" class="key c188 alt"><b>&lt;</b><span>,</span></a></li>
+	    	<li><a href="#" class="key c190 alt"><b>&gt;</b><span>.</span></a></li>
+	    	<li><a href="#" class="key c191 alt"><b>?</b><span>/</span></a></li>
+	    	<li><a href="#" class="key c16 shiftright"><span>Shift</span></a></li>
+        </ul>
+		<ul class="cf" id="bottomrow">
+	    	<li><a href="#" class="key" id="fn"><span>fn</span></a></li>
+	    	<li><a href="#" class="key c17" id="control"><span>control</span></a></li>
+	    	<li><a href="#" class="key option" id="optionleft"><span>option</span></a></li>
+	    	<li><a href="#" class="key command" id="commandleft"><span>command</span></a></li>
+	    	<li><a href="#" class="key c32" id="spacebar"></a></li>
+	    	<li><a href="#" class="key command" id="commandright"><span>command</span></a></li>
+	    	<li><a href="#" class="key option" id="optionright"><span>option</span></a></li>
+            <ol class="cf">
+            	<li><a href="#" class="key c37" id="left"><span></span></a></li>
+                <li>
+                	<a href="#" class="key c38" id="up"><span></span></a>
+                	<a href="#" class="key c40" id="down"><span></span></a>
+                </li>
+            	<li><a href="#" class="key c39" id="right"><span></span></a></li>
+            </ol>
+        </ul>
+    </div>
